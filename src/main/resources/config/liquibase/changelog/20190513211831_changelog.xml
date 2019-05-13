@@ -1,0 +1,28 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="rasen (generated)" id="1557782336806-1">
+        <createSequence sequenceName="hibernate_sequence"/>
+    </changeSet>
+    <changeSet author="rasen (generated)" id="1557782336806-2">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="userPK"/>
+            </column>
+            <column name="email" type="VARCHAR(254)"/>
+            <column name="login" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="rasen (generated)" id="1557782336806-3">
+        <addUniqueConstraint columnNames="email" constraintName="UC_USEREMAIL_COL" tableName="user"/>
+    </changeSet>
+    <changeSet author="rasen (generated)" id="1557782336806-4">
+        <addUniqueConstraint columnNames="login" constraintName="UC_USERLOGIN_COL" tableName="user"/>
+    </changeSet>
+</databaseChangeLog>
