@@ -5,7 +5,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -19,14 +18,8 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(length = 50, unique = true, nullable = false)
-    private String login;
 
     @JsonIgnore
     @NotNull
@@ -34,7 +27,6 @@ public class User implements Serializable {
     @Column(name = "password_hash", length = 60, nullable = false)
     private String password;
 
-    @Email
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
     private String email;
@@ -45,10 +37,6 @@ public class User implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
     }
 
     public String getPassword() {
@@ -81,7 +69,6 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-                "login='" + login + '\'' +
                 ", email='" + email + '\'' +
                 "}";
     }
