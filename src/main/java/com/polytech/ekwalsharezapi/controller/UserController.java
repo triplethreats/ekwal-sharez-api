@@ -34,10 +34,8 @@ public class UserController {
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 401, message = "Invalid username/password supplied")})
-    public String login(//
-                        @ApiParam("Username") @RequestParam String username, //
-                        @ApiParam("Password") @RequestParam String password) {
-        return userService.signin(username, password);
+    public String login(@RequestBody UserDataDTO user) {
+        return userService.signin(user.getEmail(), user.getPassword());
     }
 
 }
