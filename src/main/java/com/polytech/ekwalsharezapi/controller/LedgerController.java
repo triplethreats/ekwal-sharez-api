@@ -91,12 +91,12 @@ public class LedgerController {
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 401, message = "Invalid username/password supplied")})
-    public void createLedger(@ApiParam("add Ledger") @RequestBody LedgerDTO ledgerDto, HttpServletRequest req) {
+    public Long createLedger(@ApiParam("add Ledger") @RequestBody LedgerDTO ledgerDto, HttpServletRequest req) {
         Ledger ledger = modelMapper.map(ledgerDto, Ledger.class);
         ArrayList<LedgerUser> user = new ArrayList<>();
         ledgerDto.getUsers().stream().forEach(ledgerUserDTO -> user.add(modelMapper.map(ledgerUserDTO, LedgerUser.class)));
         ledger.setLedgerUser(user);
-        ledgerService.createLedger(req, ledger);
+        return ledgerService.createLedger(req, ledger);
     }
 
     @PutMapping("/{ledgerId}")

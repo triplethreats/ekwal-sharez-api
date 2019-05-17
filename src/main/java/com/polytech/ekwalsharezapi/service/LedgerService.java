@@ -61,7 +61,7 @@ public class LedgerService {
         return insert.getId();
     }
 
-    public void createLedger(HttpServletRequest req, Ledger ledger) {
+    public Long createLedger(HttpServletRequest req, Ledger ledger) {
         User user = userRepository.findByEmail(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
         Ledger insert = ledgerRepository.save(ledger);
         ledger.getLedgerUser().stream().forEach(ledgerUser -> {
@@ -70,6 +70,7 @@ public class LedgerService {
         });
         user.getLedger().add(insert);
         userRepository.save(user);
+        return insert.getId();
     }
 
     public void putTransaction(HttpServletRequest req, Long ledgerId, Transaction transaction) {
