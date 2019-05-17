@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  db:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: ekwalshare
+    ports:
+      - 5432:5432
+
+  api:
+    container_name: ekwalapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
