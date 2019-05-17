@@ -114,11 +114,17 @@ public class LedgerController {
     private LedgerResponseDTO createDTO(Ledger ledger) {
         LedgerResponseDTO ledgerDTO = modelMapper.map(ledger, LedgerResponseDTO.class);
         ledgerDTO.setUsers(ledger.getLedgerUser().stream().map(ledgerUser -> modelMapper.map(ledgerUser, LedgerUserResponseDTO.class)).collect(Collectors.toList()));
-        ledgerDTO.setTransactions(ledger.getTransactions().stream().map(transaction -> {
-            TransactionResponseDTO response = modelMapper.map(transaction, TransactionResponseDTO.class);
-            response.setPayments(transaction.getPayment().stream().map(payment -> modelMapper.map(payment, PaymentResponseDTO.class)).collect(Collectors.toList()));
-            return response;
-        }).collect(Collectors.toList()));
+
+        if(ledger.getLedgerUser() != null){
+            ledgerDTO.setTransactions(ledger.getTransactions().stream().map(transaction -> {
+                TransactionResponseDTO response = modelMapper.map(transaction, TransactionResponseDTO.class);
+                response.setPayments(transaction.getPayment().stream().map(payment -> modelMapper.map(payment, PaymentResponseDTO.class)).collect(Collectors.toList()));
+                return response;
+            }).collect(Collectors.toList()));
+        } else {
+            ledgerDTO.setTransactions(new ArrayList<>());
+        }
+
 
         return ledgerDTO;
     }
