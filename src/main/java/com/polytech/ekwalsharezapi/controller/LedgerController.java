@@ -98,6 +98,18 @@ public class LedgerController {
         ledger.setLedgerUser(user);
         ledgerService.createLedger(req, ledger);
     }
+    @PutMapping("/{ledgerId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @ApiOperation(value = "${LedgerController.createLedger}")
+    @ApiResponses(value = {//
+            @ApiResponse(code = 400, message = "Something went wrong"), //
+            @ApiResponse(code = 401, message = "Invalid username/password supplied")})
+    public void putLedger(@ApiParam("add Ledger") @RequestBody UpdatedLedgerDTO ledgerDto, HttpServletRequest req) {
+
+        ledgerService.updateLedger(req, ledgerDto);
+    }
+
+
 
     private LedgerResponseDTO createDTO(Ledger ledger) {
         LedgerResponseDTO ledgerDTO = modelMapper.map(ledger, LedgerResponseDTO.class);

@@ -13,6 +13,8 @@ public class LedgerDTO {
     private String description;
     @ApiModelProperty(position = 2)
     private List<LedgerUserDTO> users;
+    @ApiModelProperty(position = 3)
+    private Long id;
 
     public String getTitle() {
         return title;
@@ -36,5 +38,13 @@ public class LedgerDTO {
 
     public void setUsers(List<LedgerUserDTO> users) {
         this.users = users;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

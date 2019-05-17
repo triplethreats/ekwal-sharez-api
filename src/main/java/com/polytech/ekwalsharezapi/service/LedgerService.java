@@ -1,17 +1,23 @@
 package com.polytech.ekwalsharezapi.service;
 
+import com.polytech.ekwalsharezapi.dto.LedgerUserDTO;
+import com.polytech.ekwalsharezapi.dto.UpdatedLedgerDTO;
 import com.polytech.ekwalsharezapi.exception.ApiException;
 import com.polytech.ekwalsharezapi.model.Ledger;
+import com.polytech.ekwalsharezapi.model.LedgerUser;
 import com.polytech.ekwalsharezapi.model.Transaction;
 import com.polytech.ekwalsharezapi.model.User;
 import com.polytech.ekwalsharezapi.repository.*;
 import com.polytech.ekwalsharezapi.security.JwtTokenProvider;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LedgerService {
@@ -33,6 +39,9 @@ public class LedgerService {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     public Ledger getLedger(HttpServletRequest request, Long ledgerId) {
         Long userId = userRepository.findByEmail(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request))).getId();
@@ -74,5 +83,18 @@ public class LedgerService {
             payment.setTransaction(insert);
             paymentRepository.save(payment);
         });
+    }
+
+    public void updateLedger(HttpServletRequest req, UpdatedLedgerDTO ledgerDto) {
+        Ledger ledger = getLedger(req,ledgerDto.getUpdatedLedger().getId());
+        ledger.setDescription(ledgerDto.getUpdatedLedger().getDescription());
+        ledger.setTitle(ledgerDto.getUpdatedLedger().getTitle());
+
+        List<LedgerUser> ledgerUsers = ledgerDto.getUpdatedLedger().getUsers().stream().map(ledgerUserDTO -> { LedgerUser user =modelMapper.map(ledgerUserDTO,LedgerUser.class); user.setLedger(ledger); ledgerUserRepository.save(user); return user; }).collect(Collectors.toList());
+
+        ledgerUsers.addAll(ledgerDto.getNewUsers().stream().map(ledgerUserDTO -> {LedgerUser user = modelMapper.map(ledgerUserDTO,LedgerUser.class); user.setLedger(ledger); ledgerUserRepository.save(user); return user; }).collect(Collectors.toList()));
+
+        ledger.setLedgerUser(ledgerUsers);
+        ledgerRepository.save(ledger);
     }
 }
