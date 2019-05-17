@@ -39,6 +39,7 @@ public class LedgerController {
         return createDTO(ledger);
     }
 
+
     @PostMapping("/{ledgerId}/transactions")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ApiOperation(value = "${LedgerController.insertTransaction}")
@@ -52,6 +53,21 @@ public class LedgerController {
         transaction.setPayment(payments);
         return ledgerService.insertTransaction(req, ledgerId, transaction);
     }
+
+    @PutMapping("/{ledgerId}/transactions/{transactionId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @ApiOperation(value = "${LedgerController.putTransaction}")
+    @ApiResponses(value = {//
+            @ApiResponse(code = 400, message = "Something went wrong"), //
+            @ApiResponse(code = 401, message = "Invalid username/password supplied")})
+    public void putTransaction(@PathVariable(value = "ledgerId") Long ledgerId, HttpServletRequest req, @RequestBody TransactionDTO transactionDTO) {
+        Transaction transaction = modelMapper.map(transactionDTO, Transaction.class);
+        ArrayList<Payment> payments = new ArrayList<>();
+        transactionDTO.getPayments().stream().forEach(paymentDTO -> payments.add(modelMapper.map(paymentDTO, Payment.class)));
+        transaction.setPayment(payments);
+        ledgerService.putTransaction(req, ledgerId, transaction);
+    }
+
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")

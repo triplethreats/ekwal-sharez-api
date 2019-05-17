@@ -44,7 +44,7 @@ public class LedgerService {
     }
 
     public Long insertTransaction(HttpServletRequest request, Long ledgerId, Transaction transaction) {
-        transaction.setLedger(ledgerRepository.findById(ledgerId));
+        transaction.setLedger(getLedger(request,ledgerId));
         Transaction insert = transactionRepository.save(transaction);
         transaction.getPayment().stream().forEach(payment -> {
             payment.setUser(ledgerUserRepository.findById(payment.getUser().getId()));
@@ -63,5 +63,16 @@ public class LedgerService {
         });
         user.getLedger().add(insert);
         userRepository.save(user);
+    }
+
+    public void putTransaction(HttpServletRequest req, Long ledgerId, Transaction transaction) {
+        Ledger ledger = getLedger(req,ledgerId);
+        ledger.getTransactions().stream().filter(transactionBDD -> transactionBDD.getId() == transaction.getId()).findFirst().orElseThrow(() -> new ApiException("Transaction not exists", HttpStatus.UNAUTHORIZED));
+        transaction.setLedger(ledger);
+        Transaction insert =transactionRepository.save(transaction);
+        transaction.getPayment().stream().forEach(payment -> {
+            payment.setTransaction(insert);
+            paymentRepository.save(payment);
+        });
     }
 }
