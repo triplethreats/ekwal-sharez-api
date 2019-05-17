@@ -2,6 +2,7 @@ package com.polytech.ekwalsharezapi.controller;
 
 import com.polytech.ekwalsharezapi.dto.LedgerDTO;
 import com.polytech.ekwalsharezapi.dto.LedgerResponseDTO;
+import com.polytech.ekwalsharezapi.dto.LedgerUserResponseDTO;
 import com.polytech.ekwalsharezapi.model.Ledger;
 import com.polytech.ekwalsharezapi.model.LedgerUser;
 import com.polytech.ekwalsharezapi.service.LedgerService;
@@ -44,7 +45,14 @@ public class LedgerController {
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 401, message = "Invalid username/password supplied")})
     public List<LedgerResponseDTO> getLedgers(HttpServletRequest req) {
-        return ledgerService.getLedgers(req).stream().map(ledger -> modelMapper.map(ledger, LedgerResponseDTO.class)).collect(Collectors.toList());
+        List<Ledger> ledgers = ledgerService.getLedgers(req);
+        List<LedgerResponseDTO> response =  new ArrayList<>();
+        for (Ledger ledger: ledgers) {
+            LedgerResponseDTO ledgerDTO = modelMapper.map(ledger, LedgerResponseDTO.class);
+            ledgerDTO.setUsers(ledger.getLedgerUser().stream().map(ledgerUser -> modelMapper.map(ledgerUser, LedgerUserResponseDTO.class)).collect(Collectors.toList()));
+            response.add(ledgerDTO);
+        }
+        return response;
     }
 
 
