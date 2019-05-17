@@ -2,16 +2,12 @@ package com.polytech.ekwalsharezapi.service;
 
 import com.polytech.ekwalsharezapi.exception.ApiException;
 import com.polytech.ekwalsharezapi.model.Ledger;
+import com.polytech.ekwalsharezapi.model.Transaction;
 import com.polytech.ekwalsharezapi.model.User;
-import com.polytech.ekwalsharezapi.repository.LedgerRepository;
-import com.polytech.ekwalsharezapi.repository.LedgerUserRepository;
-import com.polytech.ekwalsharezapi.repository.UserRepository;
+import com.polytech.ekwalsharezapi.repository.*;
 import com.polytech.ekwalsharezapi.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +21,12 @@ public class LedgerService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     @Autowired
     private LedgerUserRepository ledgerUserRepository;
@@ -41,10 +43,24 @@ public class LedgerService {
         return userRepository.findByEmail(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request))).getLedger();
     }
 
+    public Long insertTransaction(HttpServletRequest request, Long ledgerId, Transaction transaction) {
+        transaction.setLedger(ledgerRepository.findById(ledgerId));
+        Transaction insert = transactionRepository.save(transaction);
+        transaction.getPayment().stream().forEach(payment -> {
+            payment.setUser(ledgerUserRepository.findById(payment.getUser().getId()));
+            payment.setTransaction(insert);
+            paymentRepository.save(payment);
+        });
+        return insert.getId();
+    }
+
     public void createLedger(HttpServletRequest req, Ledger ledger) {
         User user = userRepository.findByEmail(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
         Ledger insert = ledgerRepository.save(ledger);
-        ledger.getLedgerUser().stream().forEach(ledgerUser -> { ledgerUser.setLedger(insert); ledgerUserRepository.save(ledgerUser);});
+        ledger.getLedgerUser().stream().forEach(ledgerUser -> {
+            ledgerUser.setLedger(insert);
+            ledgerUserRepository.save(ledgerUser);
+        });
         user.getLedger().add(insert);
         userRepository.save(user);
     }

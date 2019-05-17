@@ -1,10 +1,10 @@
 package com.polytech.ekwalsharezapi.controller;
 
-import com.polytech.ekwalsharezapi.dto.LedgerDTO;
-import com.polytech.ekwalsharezapi.dto.LedgerResponseDTO;
-import com.polytech.ekwalsharezapi.dto.LedgerUserResponseDTO;
+import com.polytech.ekwalsharezapi.dto.*;
 import com.polytech.ekwalsharezapi.model.Ledger;
 import com.polytech.ekwalsharezapi.model.LedgerUser;
+import com.polytech.ekwalsharezapi.model.Payment;
+import com.polytech.ekwalsharezapi.model.Transaction;
 import com.polytech.ekwalsharezapi.service.LedgerService;
 import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
@@ -36,9 +36,21 @@ public class LedgerController {
             @ApiResponse(code = 401, message = "Invalid username/password supplied")})
     public LedgerResponseDTO getLedger(@PathVariable(value = "ledgerId") Long ledgerId, HttpServletRequest req) {
         Ledger ledger = ledgerService.getLedger(req, ledgerId);
-        LedgerResponseDTO ledgerDTO = modelMapper.map(ledger, LedgerResponseDTO.class);
-        ledgerDTO.setUsers(ledger.getLedgerUser().stream().map(ledgerUser -> modelMapper.map(ledgerUser, LedgerUserResponseDTO.class)).collect(Collectors.toList()));
-        return ledgerDTO;
+        return createDTO(ledger);
+    }
+
+    @PostMapping("/{ledgerId}/transactions")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @ApiOperation(value = "${LedgerController.insertTransaction}")
+    @ApiResponses(value = {//
+            @ApiResponse(code = 400, message = "Something went wrong"), //
+            @ApiResponse(code = 401, message = "Invalid username/password supplied")})
+    public Long insertTransaction(@PathVariable(value = "ledgerId") Long ledgerId, HttpServletRequest req, @RequestBody TransactionDTO transactionDTO) {
+        Transaction transaction = modelMapper.map(transactionDTO, Transaction.class);
+        ArrayList<Payment> payments = new ArrayList<>();
+        transactionDTO.getPayments().stream().forEach(paymentDTO -> payments.add(modelMapper.map(paymentDTO, Payment.class)));
+        transaction.setPayment(payments);
+        return ledgerService.insertTransaction(req, ledgerId, transaction);
     }
 
     @GetMapping
@@ -49,15 +61,12 @@ public class LedgerController {
             @ApiResponse(code = 401, message = "Invalid username/password supplied")})
     public List<LedgerResponseDTO> getLedgers(HttpServletRequest req) {
         List<Ledger> ledgers = ledgerService.getLedgers(req);
-        List<LedgerResponseDTO> response =  new ArrayList<>();
-        for (Ledger ledger: ledgers) {
-            LedgerResponseDTO ledgerDTO = modelMapper.map(ledger, LedgerResponseDTO.class);
-            ledgerDTO.setUsers(ledger.getLedgerUser().stream().map(ledgerUser -> modelMapper.map(ledgerUser, LedgerUserResponseDTO.class)).collect(Collectors.toList()));
-            response.add(ledgerDTO);
+        List<LedgerResponseDTO> response = new ArrayList<>();
+        for (Ledger ledger : ledgers) {
+            response.add(createDTO(ledger));
         }
         return response;
     }
-
 
 
     @PostMapping
@@ -72,5 +81,17 @@ public class LedgerController {
         ledgerDto.getUsers().stream().forEach(ledgerUserDTO -> user.add(modelMapper.map(ledgerUserDTO, LedgerUser.class)));
         ledger.setLedgerUser(user);
         ledgerService.createLedger(req, ledger);
+    }
+
+    private LedgerResponseDTO createDTO(Ledger ledger) {
+        LedgerResponseDTO ledgerDTO = modelMapper.map(ledger, LedgerResponseDTO.class);
+        ledgerDTO.setUsers(ledger.getLedgerUser().stream().map(ledgerUser -> modelMapper.map(ledgerUser, LedgerUserResponseDTO.class)).collect(Collectors.toList()));
+        ledgerDTO.setTransactions(ledger.getTransactions().stream().map(transaction -> {
+            TransactionResponseDTO response = modelMapper.map(transaction, TransactionResponseDTO.class);
+            response.setPayments(transaction.getPayment().stream().map(payment -> modelMapper.map(payment, PaymentResponseDTO.class)).collect(Collectors.toList()));
+            return response;
+        }).collect(Collectors.toList()));
+
+        return ledgerDTO;
     }
 }

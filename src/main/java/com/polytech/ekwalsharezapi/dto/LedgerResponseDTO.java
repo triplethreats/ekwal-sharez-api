@@ -13,8 +13,12 @@ public class LedgerResponseDTO {
     private String description;
     @ApiModelProperty(position = 2)
     private List<LedgerUserResponseDTO> users;
-    @ApiModelProperty
+
+    @ApiModelProperty(position = 4)
     private Long id;
+
+    @ApiModelProperty(position = 5)
+    private List<TransactionResponseDTO> transactions;
 
     public Long getId() {
         return id;
@@ -46,5 +50,13 @@ public class LedgerResponseDTO {
 
     public void setUsers(List<LedgerUserResponseDTO> users) {
         this.users = users;
+    }
+
+    public List<TransactionResponseDTO> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<TransactionResponseDTO> transactions) {
+        this.transactions = transactions;
     }
 }

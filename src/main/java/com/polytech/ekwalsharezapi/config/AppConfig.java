@@ -2,7 +2,9 @@ package com.polytech.ekwalsharezapi.config;
 
 import com.polytech.ekwalsharezapi.dto.LedgerUserDTO;
 import com.polytech.ekwalsharezapi.dto.LedgerUserResponseDTO;
+import com.polytech.ekwalsharezapi.dto.PaymentDTO;
 import com.polytech.ekwalsharezapi.model.LedgerUser;
+import com.polytech.ekwalsharezapi.model.Payment;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +32,6 @@ public class AppConfig {
 
         modelMapper.addMappings(ledgerMap);
         modelMapper.addMappings(ledgerUserToDto);
-
         return modelMapper;
     }
 }

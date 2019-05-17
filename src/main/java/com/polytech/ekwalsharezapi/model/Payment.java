@@ -10,9 +10,6 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
-    private Long total;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private LedgerUser user;
@@ -20,9 +17,6 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
-
-    @Column
-    private String name;
 
     public Long getId() {
         return id;
@@ -32,28 +26,12 @@ public class Payment {
         this.id = id;
     }
 
-    public Long getTotal() {
-        return total;
-    }
-
-    public void setTotal(Long total) {
-        this.total = total;
-    }
-
     public LedgerUser getUser() {
         return user;
     }
 
     public void setUser(LedgerUser user) {
         this.user = user;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Transaction getTransaction() {
