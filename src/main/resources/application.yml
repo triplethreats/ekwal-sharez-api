@@ -56,4 +56,4 @@ spring:
     change-log: classpath:config/liquibase/master.xml
 
 server:
-  port: 8080
+  port: 3000

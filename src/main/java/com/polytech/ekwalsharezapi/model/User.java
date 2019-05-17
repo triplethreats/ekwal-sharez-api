@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A user.
@@ -30,6 +31,9 @@ public class User implements Serializable {
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
     private String email;
+
+    @ManyToMany
+    private List<Ledger> ledger;
 
     public Long getId() {
         return id;
@@ -71,5 +75,13 @@ public class User implements Serializable {
         return "User{" +
                 ", email='" + email + '\'' +
                 "}";
+    }
+
+    public List<Ledger> getLedger() {
+        return ledger;
+    }
+
+    public void setLedger(List<Ledger> ledger) {
+        this.ledger = ledger;
     }
 }
