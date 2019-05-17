@@ -35,7 +35,10 @@ public class LedgerController {
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 401, message = "Invalid username/password supplied")})
     public LedgerResponseDTO getLedger(@PathVariable(value = "ledgerId") Long ledgerId, HttpServletRequest req) {
-        return modelMapper.map(ledgerService.getLedger(req, ledgerId), LedgerResponseDTO.class);
+        Ledger ledger = ledgerService.getLedger(req, ledgerId);
+        LedgerResponseDTO ledgerDTO = modelMapper.map(ledger, LedgerResponseDTO.class);
+        ledgerDTO.setUsers(ledger.getLedgerUser().stream().map(ledgerUser -> modelMapper.map(ledgerUser, LedgerUserResponseDTO.class)).collect(Collectors.toList()));
+        return ledgerDTO;
     }
 
     @GetMapping
