@@ -2,6 +2,7 @@ package com.polytech.ekwalsharezapi.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpdatedLedgerDTO {
@@ -20,6 +21,9 @@ public class UpdatedLedgerDTO {
     }
 
     public List<LedgerUserDTO> getNewUsers() {
+        if(newUsers == null){
+            return new ArrayList<>();
+        }
         return newUsers;
     }
 

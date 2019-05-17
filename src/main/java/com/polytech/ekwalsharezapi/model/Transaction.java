@@ -18,6 +18,9 @@ public class Transaction {
     private Date date;
 
     @Column
+    private String name;
+
+    @Column
     private String description;
 
     @OneToMany(mappedBy = "transaction")
@@ -73,5 +76,13 @@ public class Transaction {
 
     public void setLedger(Ledger ledger) {
         this.ledger = ledger;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

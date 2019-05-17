@@ -17,7 +17,7 @@ public class TransactionResponseDTO {
     private Date date;
 
     @ApiModelProperty(position = 3)
-    private String description;
+    private String name;
 
     @ApiModelProperty(position = 4)
     private List<PaymentResponseDTO> payments;
@@ -46,12 +46,12 @@ public class TransactionResponseDTO {
         this.date = date;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<PaymentResponseDTO> getPayments() {

@@ -43,7 +43,7 @@ public class LedgerService {
 
     public Ledger getLedger(HttpServletRequest request, Long ledgerId) {
         Long userId = userRepository.findByEmail(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request))).getId();
-        return userRepository.findById(userId).getLedger().stream().filter(ledger -> ledger.getId() == ledgerId).findFirst().orElseThrow(() -> new ApiException("Ledger not exists", HttpStatus.UNAUTHORIZED));
+        return userRepository.findById(userId).getLedger().stream().filter(ledger -> ledger.getId().equals(ledgerId)).findFirst().orElseThrow(() -> new ApiException("Ledger not exists", HttpStatus.UNAUTHORIZED));
     }
 
     public List<Ledger> getLedgers(HttpServletRequest request) {

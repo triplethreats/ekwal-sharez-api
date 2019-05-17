@@ -12,7 +12,7 @@
 
 logging:
   level:
-    ROOT: DEBUG
+    ROOT: ERROR
     dev.triplethreats.ekwalsharez: DEBUG
 
 spring:
