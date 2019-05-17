@@ -98,6 +98,7 @@ public class LedgerController {
         ledger.setLedgerUser(user);
         ledgerService.createLedger(req, ledger);
     }
+
     @PutMapping("/{ledgerId}")
     @PreAuthorize("hasRole('ROLE_USER')")
     @ApiOperation(value = "${LedgerController.createLedger}")
@@ -108,7 +109,6 @@ public class LedgerController {
 
         ledgerService.updateLedger(req, ledgerDto);
     }
-
 
 
     private LedgerResponseDTO createDTO(Ledger ledger) {

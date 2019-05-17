@@ -1,5 +1,7 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <changeSet author="rasen (generated)" id="1558058167898-2">
         <createTable tableName="ledger">
             <column autoIncrement="true" name="id" type="BIGINT">
@@ -61,28 +63,52 @@
         </createTable>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-8">
-        <addForeignKeyConstraint baseColumnNames="transaction_id" baseTableName="payment" constraintName="FK53qo12unt0o5flr83axs6v2i7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="transaction" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="transaction_id" baseTableName="payment"
+                                 constraintName="FK53qo12unt0o5flr83axs6v2i7" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="transaction"
+                                 validate="true"/>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-9">
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="payment" constraintName="FK85mpnfuno637k92msa5jpes06" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger_user" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="payment"
+                                 constraintName="FK85mpnfuno637k92msa5jpes06" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger_user"
+                                 validate="true"/>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-10">
-        <addForeignKeyConstraint baseColumnNames="ledger_user_id" baseTableName="ledger_user_user" constraintName="FKgflhv1exhjlpoxy0w5gb8dpc8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger_user" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="ledger_user_id" baseTableName="ledger_user_user"
+                                 constraintName="FKgflhv1exhjlpoxy0w5gb8dpc8" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger_user"
+                                 validate="true"/>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-11">
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_ledger" constraintName="FKi1etw9yvpvdr0198lflx4m21q" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_ledger"
+                                 constraintName="FKi1etw9yvpvdr0198lflx4m21q" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user"
+                                 validate="true"/>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-12">
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="ledger_user_user" constraintName="FKiojolvtcl1x15gubftuetdrh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="ledger_user_user"
+                                 constraintName="FKiojolvtcl1x15gubftuetdrh" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user"
+                                 validate="true"/>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-13">
-        <addForeignKeyConstraint baseColumnNames="ledger_id" baseTableName="user_ledger" constraintName="FKk7sjv8qw4y2bja2vhtk8o8cd7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="ledger_id" baseTableName="user_ledger"
+                                 constraintName="FKk7sjv8qw4y2bja2vhtk8o8cd7" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger"
+                                 validate="true"/>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-14">
-        <addForeignKeyConstraint baseColumnNames="ledger_id" baseTableName="transaction" constraintName="FKr3sad456yk2yexydwt560pjyh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="ledger_id" baseTableName="transaction"
+                                 constraintName="FKr3sad456yk2yexydwt560pjyh" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger"
+                                 validate="true"/>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-15">
-        <addForeignKeyConstraint baseColumnNames="ledger_id" baseTableName="ledger_user" constraintName="FKt3qqctayu8idyukxa0ht0t2wx" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger" validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="ledger_id" baseTableName="ledger_user"
+                                 constraintName="FKt3qqctayu8idyukxa0ht0t2wx" deferrable="false"
+                                 initiallyDeferred="false" referencedColumnNames="id" referencedTableName="ledger"
+                                 validate="true"/>
     </changeSet>
     <changeSet author="rasen (generated)" id="1558058167898-1">
         <dropUniqueConstraint constraintName="UC_USEREMAIL_COL" tableName="user"/>

@@ -1,12 +1,7 @@
 package com.polytech.ekwalsharezapi.dto;
 
-import com.polytech.ekwalsharezapi.model.Payment;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 

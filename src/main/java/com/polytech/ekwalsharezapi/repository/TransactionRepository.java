@@ -1,6 +1,5 @@
 package com.polytech.ekwalsharezapi.repository;
 
-import com.polytech.ekwalsharezapi.model.Ledger;
 import com.polytech.ekwalsharezapi.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 

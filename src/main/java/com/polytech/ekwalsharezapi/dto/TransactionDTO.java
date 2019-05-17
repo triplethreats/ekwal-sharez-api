@@ -1,7 +1,6 @@
 package com.polytech.ekwalsharezapi.dto;
 
 
-import com.polytech.ekwalsharezapi.model.Payment;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;

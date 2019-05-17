@@ -1,6 +1,5 @@
 package com.polytech.ekwalsharezapi.dto;
 
-import com.polytech.ekwalsharezapi.model.Ledger;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;

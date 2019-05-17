@@ -1,6 +1,5 @@
 package com.polytech.ekwalsharezapi.service;
 
-import com.polytech.ekwalsharezapi.dto.LedgerUserDTO;
 import com.polytech.ekwalsharezapi.dto.UpdatedLedgerDTO;
 import com.polytech.ekwalsharezapi.exception.ApiException;
 import com.polytech.ekwalsharezapi.model.Ledger;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +51,7 @@ public class LedgerService {
     }
 
     public Long insertTransaction(HttpServletRequest request, Long ledgerId, Transaction transaction) {
-        transaction.setLedger(getLedger(request,ledgerId));
+        transaction.setLedger(getLedger(request, ledgerId));
         Transaction insert = transactionRepository.save(transaction);
         transaction.getPayment().stream().forEach(payment -> {
             payment.setUser(ledgerUserRepository.findById(payment.getUser().getId()));
@@ -75,10 +73,10 @@ public class LedgerService {
     }
 
     public void putTransaction(HttpServletRequest req, Long ledgerId, Transaction transaction) {
-        Ledger ledger = getLedger(req,ledgerId);
+        Ledger ledger = getLedger(req, ledgerId);
         ledger.getTransactions().stream().filter(transactionBDD -> transactionBDD.getId() == transaction.getId()).findFirst().orElseThrow(() -> new ApiException("Transaction not exists", HttpStatus.UNAUTHORIZED));
         transaction.setLedger(ledger);
-        Transaction insert =transactionRepository.save(transaction);
+        Transaction insert = transactionRepository.save(transaction);
         transaction.getPayment().stream().forEach(payment -> {
             payment.setTransaction(insert);
             paymentRepository.save(payment);
@@ -86,13 +84,23 @@ public class LedgerService {
     }
 
     public void updateLedger(HttpServletRequest req, UpdatedLedgerDTO ledgerDto) {
-        Ledger ledger = getLedger(req,ledgerDto.getUpdatedLedger().getId());
+        Ledger ledger = getLedger(req, ledgerDto.getUpdatedLedger().getId());
         ledger.setDescription(ledgerDto.getUpdatedLedger().getDescription());
         ledger.setTitle(ledgerDto.getUpdatedLedger().getTitle());
 
-        List<LedgerUser> ledgerUsers = ledgerDto.getUpdatedLedger().getUsers().stream().map(ledgerUserDTO -> { LedgerUser user =modelMapper.map(ledgerUserDTO,LedgerUser.class); user.setLedger(ledger); ledgerUserRepository.save(user); return user; }).collect(Collectors.toList());
+        List<LedgerUser> ledgerUsers = ledgerDto.getUpdatedLedger().getUsers().stream().map(ledgerUserDTO -> {
+            LedgerUser user = modelMapper.map(ledgerUserDTO, LedgerUser.class);
+            user.setLedger(ledger);
+            ledgerUserRepository.save(user);
+            return user;
+        }).collect(Collectors.toList());
 
-        ledgerUsers.addAll(ledgerDto.getNewUsers().stream().map(ledgerUserDTO -> {LedgerUser user = modelMapper.map(ledgerUserDTO,LedgerUser.class); user.setLedger(ledger); ledgerUserRepository.save(user); return user; }).collect(Collectors.toList()));
+        ledgerUsers.addAll(ledgerDto.getNewUsers().stream().map(ledgerUserDTO -> {
+            LedgerUser user = modelMapper.map(ledgerUserDTO, LedgerUser.class);
+            user.setLedger(ledger);
+            ledgerUserRepository.save(user);
+            return user;
+        }).collect(Collectors.toList()));
 
         ledger.setLedgerUser(ledgerUsers);
         ledgerRepository.save(ledger);

@@ -1,9 +1,6 @@
 package com.polytech.ekwalsharezapi.dto;
 
-import com.polytech.ekwalsharezapi.model.LedgerUser;
 import io.swagger.annotations.ApiModelProperty;
-
-import javax.persistence.Column;
 
 public class PaymentDTO {
     @ApiModelProperty(position = 0)
